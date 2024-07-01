@@ -3,39 +3,34 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('products', {
+    await queryInterface.createTable('user_credentials', {
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true,
         allowNull: false
+        //si pone algo será true
       },
-      productCategoryId:{
+      userId: {
         type: Sequelize.INTEGER,
-        allowNull: false
+        allowNull: false,
+        references:{
+          model: 'users',
+          key: 'id'
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'NO ACTION'
       },
-      name: {
+      email: {
         type: Sequelize.STRING,
         allowNull: false
       },
-      reference: {
+      password: {
         type: Sequelize.STRING,
         allowNull: false
       },
-      units: {
-        type: Sequelize.INTEGER,
-        allowNull: false
-      },
-      measurementUnit : {
+      lastPasswordChange: {
         type: Sequelize.STRING,
-        allowNull: false
-      },
-      measurement : {
-        type: Sequelize.INTEGER,
-        allowNull: false
-      },
-      visible : {
-        type: Sequelize.BOOLEAN,
         allowNull: false
       },
       createdAt: {
@@ -50,9 +45,12 @@ module.exports = {
         type: Sequelize.DATE
       }
     })
+    await queryInterface.addIndex('user_credentials', ['userId'], {
+      name: 'user_credentials_userId_index'
+    })
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('products')
+    await queryInterface.dropTable('user_credentials')
   }
 }

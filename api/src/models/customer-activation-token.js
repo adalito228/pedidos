@@ -42,13 +42,19 @@ module.exports = function (sequelize, DataTypes) {
           fields: [
             { name: 'id' }
           ]
+        },{
+          name: 'customers_customerId_fk',
+          using: 'BTREE',
+          fields: [
+            { name: 'customerId' }
+          ]
         }
       ]
     }
   )
 
   CustomerActivationToken.associate = function (models) {
-   
+    CustomerActivationToken.belongsTo(models.Customer, { as: 'customer', foreignKey: 'customerId' })
   }
 
   return CustomerActivationToken

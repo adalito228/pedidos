@@ -1,5 +1,5 @@
 module.exports = function (sequelize, DataTypes) {
-  const SaleDetails = sequelize.define('SaleDetails',//Define que va a haber un modelo 
+  const SaleDetail = sequelize.define('SaleDetail',//Define que va a haber un modelo 
     {
       id: {
         type: DataTypes.INTEGER,
@@ -50,14 +50,37 @@ module.exports = function (sequelize, DataTypes) {
           fields: [
             { name: 'id' }
           ]
+        },
+        {
+          name: 'sale_details_saleId_fk',
+          using: 'BTREE',
+          fields: [
+            { name: 'saleId' }
+          ]
+        },
+        {
+          name: 'sale_details_productId_fk',
+          using: 'BTREE',
+          fields: [
+            { name: 'productId' }
+          ]
+        },
+        {
+          name: 'sale_details_priceId_fk',
+          using: 'BTREE',
+          fields: [
+            { name: 'priceId' }
+          ]
         }
       ]
     }
   )
 
-  SaleDetails.associate = function (models) {
-   
+  SaleDetail.associate = function (models) {
+    SaleDetail.belongsTo(models.Sale, { as: 'sale', foreignKey: 'saleId' })
+    SaleDetail.belongsTo(models.Product, { as: 'product', foreignKey: 'productId' })
+    SaleDetail.belongsTo(models.Price, { as: 'price', foreignKey: 'priceId' })
   }
 
-  return SaleDetails
+  return SaleDetail
 }

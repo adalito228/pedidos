@@ -42,13 +42,20 @@ module.exports = function (sequelize, DataTypes) {
           fields: [
             { name: 'id' }
           ]
+        },
+        {
+          name: 'user_reset_password_tokens_userId_fk',
+          using: 'BTREE',
+          fields: [
+            { name: 'userId' }
+          ]
         }
       ]
     }
   )
 
   UserResetPasswordToken.associate = function (models) {
-   
+    UserResetPasswordToken.belongsTo(models.User, { as: 'user', foreignKey: 'userId' })
   }
 
   return UserResetPasswordToken

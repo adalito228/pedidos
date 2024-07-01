@@ -2,6 +2,7 @@ const sequelizeDb = require('../../models')
 const Company = sequelizeDb.Company
 const Op = sequelizeDb.Sequelize.Op
 
+
 exports.create = (req, res) => {
 
   Company.create(req.body).then(async data => {

@@ -42,13 +42,20 @@ module.exports = function (sequelize, DataTypes) {
           fields: [
             { name: 'id' }
           ]
+        },
+        {
+          name: 'user_activation_tokens_userId_fk',
+          using: 'BTREE',
+          fields: [
+            { name: 'userId' }
+          ]
         }
       ]
     }
   )
 
   UserActivationToken.associate = function (models) {
-   
+    UserActivationToken.belongsTo(models.User, { as: 'user', foreignKey: 'userId' })
   }
 
   return UserActivationToken

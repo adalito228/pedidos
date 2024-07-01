@@ -1,5 +1,5 @@
 module.exports = function (sequelize, DataTypes) {
-  const UserCredentials = sequelize.define('UserCredentials',//Define que va a haber un modelo 
+  const CustomerCredential = sequelize.define('CustomerCredential',//Define que va a haber un modelo 
     {
       id: {
         type: DataTypes.INTEGER,
@@ -7,7 +7,7 @@ module.exports = function (sequelize, DataTypes) {
         primaryKey: true,
         allowNull: false
       },
-      userId: {
+      customerId: {
         type: DataTypes.INTEGER,
         allowNull: false
       },
@@ -20,7 +20,7 @@ module.exports = function (sequelize, DataTypes) {
         allowNull: false
       },
       lastPasswordChange: {
-        type: DataTypes.STRING,
+        type: DataTypes.DATE,
         allowNull: false
       },
       createdAt: {
@@ -31,7 +31,7 @@ module.exports = function (sequelize, DataTypes) {
       }
     }, {
       sequelize,
-      tableName: 'user_credentials',
+      tableName: 'customer_credentials',
       timestamps: true,
       paranoid: true,
       indexes: [
@@ -42,14 +42,21 @@ module.exports = function (sequelize, DataTypes) {
           fields: [
             { name: 'id' }
           ]
+        },
+        {
+          name: 'customer_credentials_customerId_fk',
+          using: 'BTREE',
+          fields: [
+            { name: 'customerId' }
+          ]
         }
       ]
     }
   )
 
-  UserCredentials.associate = function (models) {
-   
+  CustomerCredential.associate = function (models) {
+    CustomerCredential.belongsTo(models.Customer, { as: 'customer', foreignKey: 'customerId' })
   }
 
-  return UserCredentials
+  return CustomerCredential
 }

@@ -3,35 +3,29 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('sent_emails', {
+    await queryInterface.createTable('prices', {
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true,
         allowNull: false
       },
-      userId: {
+      productId: {
         type: Sequelize.INTEGER,
+        allowNull: false,
+        references:{
+          model: 'products',
+          key: 'id'
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'NO ACTION'
+      },
+      basePrice: {
+        type: Sequelize.DECIMAL,
         allowNull: false
       },
-      userType: {
-        type: Sequelize.STRING,
-        allowNull: false
-      },
-      emailTemplate: {
-        type: Sequelize.STRING,
-        allowNull: false
-      },
-      sendAt: {
-        type: Sequelize.DATE,
-        allowNull: false
-      },
-      readedAt: {
-        type: Sequelize.DATE,
-        allowNull: false
-      },
-      uuid: {
-        type: Sequelize.STRING,
+      current: {
+        type: Sequelize.BOOLEAN,
         allowNull: false
       },
       createdAt: {
@@ -46,9 +40,12 @@ module.exports = {
         type: Sequelize.DATE
       }
     })
+    await queryInterface.addIndex('prices', ['productId'], {
+      name: 'prices_productId_index'
+    })
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('sent_emails')
+    await queryInterface.dropTable('prices')
   }
 }

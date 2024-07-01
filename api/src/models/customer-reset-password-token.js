@@ -47,12 +47,20 @@ module.exports = function (sequelize, DataTypes) {
             { name: 'id' }
           ]
         }
+        ,
+        {
+          name: 'customer_reset_password_tokens_customerId_fk',
+          using: 'BTREE',
+          fields: [
+            { name: 'customerId' }
+          ]
+        }
       ]
     }
   )
 
   CustomerResetPasswordToken.associate = function (models) {
-   
+    CustomerResetPasswordToken.belongsTo(models.Customer, { as: 'customer', foreignKey: 'customerId' })
   }
 
   return CustomerResetPasswordToken

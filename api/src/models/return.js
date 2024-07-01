@@ -50,13 +50,29 @@ module.exports = function (sequelize, DataTypes) {
           fields: [
             { name: 'id' }
           ]
+        },
+        {
+          name: 'returns_saleId_fk',
+          using: 'BTREE',
+          fields: [
+            { name: 'saleId' }
+          ]
+        },
+        {
+          name: 'returns_customerId_fk',
+          using: 'BTREE',
+          fields: [
+            { name: 'customerId' }
+          ]
         }
+        
       ]
     }
   )
 
   Return.associate = function (models) {
-   
+    Return.belongsTo(models.Sale, { as: 'sale', foreignKey: 'saleId' })
+    Return.belongsTo(models.Customer, { as: 'customer', foreignKey: 'customerId' })
   }
 
   return Return

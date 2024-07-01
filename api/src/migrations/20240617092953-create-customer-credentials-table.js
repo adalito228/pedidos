@@ -3,27 +3,33 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('user_activation_tokens', {
+    await queryInterface.createTable('customer_credentials', {
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true,
         allowNull: false
       },
-      userId: {
+      customerId: {
         type: Sequelize.INTEGER,
-        allowNull: false
+        allowNull: false,
+        references:{
+          model: 'customers',
+          key: 'id'
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'NO ACTION'
       },
-      token: {
+      email: {
         type: Sequelize.STRING,
         allowNull: false
       },
-      expirationDate: {
-        type: Sequelize.DATE,
+      password: {
+        type: Sequelize.STRING,
         allowNull: false
       },
-      used: {
-        type: Sequelize.BOOLEAN,
+      lastPasswordChange: {
+        type: Sequelize.DATE,
         allowNull: false
       },
       createdAt: {
@@ -38,9 +44,12 @@ module.exports = {
         type: Sequelize.DATE
       }
     })
+    await queryInterface.addIndex('customer_credentials', ['customerId'], {
+      name: 'customer_credentials_customerId_index'
+    })
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('user_activation_tokens')
+    await queryInterface.dropTable('customer_credentials')
   }
 }

@@ -38,13 +38,21 @@ module.exports = function (sequelize, DataTypes) {
           fields: [
             { name: 'id' }
           ]
+        },
+        {
+          name: 'prices_productId_fk',
+          using: 'BTREE',
+          fields: [
+            { name: 'productId' }
+          ]
         }
       ]
     }
   )
 
   Price.associate = function (models) {
-   
+    Price.belongsTo(models.Product, { as: 'product', foreignKey: 'productId' })
+    Price.hasMany(models.SaleDetail, { as: 'saleDetails', foreignKey: 'priceId' })
   }
 
   return Price

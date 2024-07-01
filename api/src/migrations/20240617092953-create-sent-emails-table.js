@@ -3,27 +3,41 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('customer_activation_tokens', {
+    await queryInterface.createTable('sent_emails', {
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true,
         allowNull: false
       },
-      customerId: {
+      userId: {
         type: Sequelize.INTEGER,
-        allowNull: false
+        allowNull: false,
+        references:{
+          model: 'users',
+          key: 'id'
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'NO ACTION'
       },
-      token: {
+      userType: {
         type: Sequelize.STRING,
         allowNull: false
       },
-      expirationDate: {
+      emailTemplate: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
+      sendAt: {
         type: Sequelize.DATE,
         allowNull: false
       },
-      used: {
-        type: Sequelize.BOOLEAN,
+      readedAt: {
+        type: Sequelize.DATE,
+        allowNull: false
+      },
+      uuid: {
+        type: Sequelize.STRING,
         allowNull: false
       },
       createdAt: {
@@ -38,9 +52,12 @@ module.exports = {
         type: Sequelize.DATE
       }
     })
+    await queryInterface.addIndex('sent_emails', ['userId'], {
+      name: 'sent_emails_userId_index'
+    })
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('customer_activation_tokens')
+    await queryInterface.dropTable('sent_emails')
   }
 }

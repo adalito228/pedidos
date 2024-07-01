@@ -3,35 +3,33 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('sale_details', {
+    await queryInterface.createTable('customer_reset_password_tokens', {
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true,
         allowNull: false
       },
-      saleId: {
+      customerId: {
         type: Sequelize.INTEGER,
-        allowNull: false
+        allowNull: false,
+        references:{
+          model: 'customers',
+          key: 'id'
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'NO ACTION'
       },
-      productId: {
-        type: Sequelize.INTEGER,
-        allowNull: false
-      },
-      priceId: {
-        type: Sequelize.INTEGER,
-        allowNull: false
-      },
-      productName: {
+      token: {
         type: Sequelize.STRING,
         allowNull: false
       },
-      basePrice: {
-        type: Sequelize.DECIMAL,
+      expirationDate: {
+        type: Sequelize.DATE,
         allowNull: false
       },
-      quantity: {
-        type: Sequelize.INTEGER,
+      used: {
+        type: Sequelize.BOOLEAN,
         allowNull: false
       },
       createdAt: {
@@ -46,9 +44,12 @@ module.exports = {
         type: Sequelize.DATE
       }
     })
+    await queryInterface.addIndex('customer_reset_password_tokens', ['customerId'], {
+      name: 'customer_reset_password_tokens_customerId_index'
+    })
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('sale_details')
+    await queryInterface.dropTable('customer_reset_password_tokens')
   }
 }
